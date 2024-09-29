@@ -1,35 +1,34 @@
-name: Update SRS File
+name: Update SRS Rules
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天午夜运行一次
-  workflow_dispatch:  # 允许手动触发工作流
+    - cron: '0 0 * * *'  # 每天午夜运行一次任务
+  workflow_dispatch:  # 手动触发
 
 jobs:
-  update-srs:
+  update-rules:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout the repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # 使用 Python 3 的最新版本
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
-          pip install requests
+          pip install requests  # 根据需求安装更多依赖
 
-      - name: Run script
+      - name: Fetch and Convert Rules
         run: |
-          python scripts/generate_srs.py  # 替换为你的脚本路径
+          python fetch_and_convert.py  # 调用你写好的 Python 脚本
 
-      - name: Commit and push changes
+      - name: Commit and Push .srs file
         run: |
-          git config --local user.email "your_email@example.com"
-          git config --local user.name "your_username"
-          git add rules.srs
-          git commit -m "Update SRS file" || echo "No changes to commit"
+          git config --global user.name "Your Name"
+          git config --global user.email "your.email@example.com"
+          git add converted_rules.srs
+          git commit -m "Updated Singbox rules"
           git push
