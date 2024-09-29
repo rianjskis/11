@@ -27,6 +27,13 @@ jobs:
         run: |
           python script.py  # Run the conversion script
 
+      - name: Check if .srs file exists
+        run: |
+          if [ ! -f singbox_rules.srs ]; then
+            echo "singbox_rules.srs not found!"
+            exit 1
+          fi
+
       - name: Commit and Push Changes
         run: |
           git config --local user.name "github-actions[bot]"
