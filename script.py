@@ -34,4 +34,5 @@ all_domains = fetch_and_convert_github_hosts(github_raw_url)
 # Write the results to a .srs file
 with open('singbox_rules.srs', 'w') as outfile:
     for domain in all_domains:
-        outfile.write(f"DOMAIN-SUFFIX,{domain},FINAL\n")  # Example format; adjust as needed
+        outfile.write(f"{domain}\n")  # Directly write the domain
+
