@@ -1,41 +1,37 @@
 import requests
-import json
-
 
 def fetch_and_convert_github_hosts(github_raw_url):
-    # 从GitHub获取文件内容
+    # Fetch the file content from GitHub
     response = requests.get(github_raw_url)
     if response.status_code != 200:
         raise Exception(f"Failed to fetch file from GitHub: {response.status_code}")
 
     all_domain = []
-    hosts_data = response.text.splitlines()  # 逐行读取
+    hosts_data = response.text.splitlines()  # Read file line by line
+
     for line in hosts_data:
-        # 跳过注释和空行
-        if line.startswith('#') or not line.strip() or line.find('127.0.0.1') :
+        # Skip comments and empty lines
+        if line.startswith('#') or not line.strip() or '127.0.0.1' in line:
             continue
+        
         parts = line.split()
-        if len(parts) >= 2:  # 只取前两列，忽略多余的列
+        if len(parts) >= 2:  # Only take the first two columns, ignore extra columns
             ip, domain = parts[:2]
             all_domain.append(domain)
 
-    # 打印提取的域名列表
-    all_domain.pop(0)
-    # 创建最终的配置文件格式
-    singbox_config = {
-        "version": 2,
-        "rules": [{"domain": all_domain, }],
-    }
+    # Remove the first entry if it's unnecessary (consider clarifying why)
+    if all_domain:
+        all_domain.pop(0)
 
-    return singbox_config
+    return all_domain  # Return the list of domains
 
-
-# 示例GitHub hosts文件链接 (可以替换为真实链接)
+# Example GitHub hosts file link (replace with the actual link if needed)
 github_raw_url = "https://raw.githubusercontent.com/lingeringsound/10007_auto/master/reward"
 
-# 获取并转换hosts文件
-singbox_rules = fetch_and_convert_github_hosts(github_raw_url)
+# Fetch and convert the hosts file
+all_domains = fetch_and_convert_github_hosts(github_raw_url)
 
-# 将结果输出为json文件
-with open('singbox_rules.json', 'w') as outfile:
-    json.dump(singbox_rules, outfile, indent=4)
+# Write the results to a .srs file
+with open('singbox_rules.srs', 'w') as outfile:
+    for domain in all_domains:
+        outfile.write(f"DOMAIN-SUFFIX,{domain},FINAL\n")  # Example format; adjust as needed
