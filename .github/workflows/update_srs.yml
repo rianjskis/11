@@ -1,0 +1,35 @@
+name: Update SRS File
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天午夜运行一次
+  workflow_dispatch:  # 允许手动触发工作流
+
+jobs:
+  update-srs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # 使用 Python 3 的最新版本
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run script
+        run: |
+          python scripts/generate_srs.py  # 替换为你的脚本路径
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "your_email@example.com"
+          git config --local user.name "your_username"
+          git add rules.srs
+          git commit -m "Update SRS file" || echo "No changes to commit"
+          git push
