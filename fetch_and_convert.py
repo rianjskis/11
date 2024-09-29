@@ -13,7 +13,16 @@ def fetch_rules():
 def convert_to_srs(rules_text):
     rules = []
     for line in rules_text.strip().splitlines():
-        ip, domain = line.split(' ')
+        line = line.strip()
+        if not line:
+            # 跳过空行
+            continue
+        parts = line.split(' ')
+        if len(parts) != 2:
+            # 如果某行不符合 IP 和域名的格式，跳过该行
+            print(f"Skipping invalid line: {line}")
+            continue
+        ip, domain = parts
         rule = {
             'type': 'domain',
             'value': domain,
