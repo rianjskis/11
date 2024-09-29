@@ -1,3 +1,0 @@
-DOMAIN-SUFFIX,example.com,DIRECT
-DOMAIN-SUFFIX,test.com,DIRECT
-DOMAIN-REGEX,^.*\.example\.com$,DIRECT
