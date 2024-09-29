@@ -9,7 +9,7 @@ def fetch_rules():
     else:
         raise Exception("Failed to fetch rules")
 
-# 转换为 Singbox .srs 格式
+# 转换为 Singbox .srs 格式（只保留域名）
 def convert_to_srs(rules_text):
     rules = []
     for line in rules_text.strip().splitlines():
@@ -18,15 +18,14 @@ def convert_to_srs(rules_text):
             # 跳过空行
             continue
         parts = line.split(' ')
-        if len(parts) != 2:
-            # 如果某行不符合 IP 和域名的格式，跳过该行
+        if len(parts) < 2:
+            # 如果没有IP，直接跳过
             print(f"Skipping invalid line: {line}")
             continue
-        ip, domain = parts
+        domain = parts[1]  # 只保留域名部分
         rule = {
             'type': 'domain',
-            'value': domain,
-            'ip': ip
+            'value': domain
         }
         rules.append(rule)
     
