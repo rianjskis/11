@@ -19,13 +19,9 @@ def fetch_and_convert_github_hosts(github_raw_url):
             ip, domain = parts[:2]
             all_domain.append(domain)
 
-    # Remove the first entry if it's unnecessary (consider clarifying why)
-    if all_domain:
-        all_domain.pop(0)
-
     return all_domain  # Return the list of domains
 
-# Example GitHub hosts file link (replace with the actual link if needed)
+# Example GitHub hosts file link
 github_raw_url = "https://raw.githubusercontent.com/lingeringsound/10007_auto/master/reward"
 
 # Fetch and convert the hosts file
@@ -35,4 +31,3 @@ all_domains = fetch_and_convert_github_hosts(github_raw_url)
 with open('singbox_rules.srs', 'w') as outfile:
     for domain in all_domains:
         outfile.write(f"{domain}\n")  # Directly write the domain
-
