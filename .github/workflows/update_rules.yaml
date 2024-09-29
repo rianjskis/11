@@ -17,9 +17,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt  # 如果有依赖的话
+      # 删除或注释掉这一部分
+      # - name: Install dependencies
+      #   run: |
+      #     pip install -r requirements.txt
 
       - name: Run Singbox script
         run: |
